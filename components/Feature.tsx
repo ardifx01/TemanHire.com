@@ -5,14 +5,18 @@ import React from 'react'
 const Features = () => {
   return (
     <section id="4_kings"className="flex-col flexCenter overflow-hidden bg-feature-bg bg-center bg-no-repeat py-24">
-      <div className="max-container padding-container relative w-full flex justify-end">
-        <div className="flex flex-1 lg:min-h-[900px]">
+      <div className=" max-container padding-container relative w-full flex justify-end">
+        <div className=" flex flex-1 lg:min-h-[900px]">
           <Image
             src="/phone2.png"
             alt="phone"
             width={440}
             height={1000}
-            className="feature-phone"
+            className="
+            feature-phone
+            lg:absolute lg:left-0 lg:top-1/2 lg:-translate-y-1/2
+            lg:-translate-x-10   // geser ke kiri 10px (atur sesuai kebutuhan)
+          "
           />
         </div>
 
