@@ -3,7 +3,7 @@ import React from 'react'
 
 const Guide = () => {
   return (
-    <section className="flexCenter flex-col">
+    <section className=" flexCenter flex-col">
       <div className="padding-container max-container w-full pb-24">
         <p className="uppercase regular-18 -mt-1 mb-3 text-[#0097b2]">
           We are here for you

@@ -5,63 +5,89 @@ interface CampProps {
   backgroundImage: string;
   title: string;
   subtitle: string;
+  subsubtitle: string;
   peopleJoined: string;
+  link?: string; // (opsional) tambahkan link
 }
 
-const CampSite = ({ backgroundImage, title, subtitle, peopleJoined }: CampProps) => {
+const CampSite = ({ backgroundImage, title, subtitle, subsubtitle, peopleJoined, link }: CampProps) => {
   return (
-    <div className={`h-full w-full min-w-[1100px] ${backgroundImage} bg-cover bg-no-repeat lg:rounded-r-5xl 2xl:rounded-5xl`}>
-     <div className="flex h-full flex-col items-start justify-between p-6 lg:px-20 lg:py-10">
-      <div className="flexCenter gap-4">
-        <div className="rounded-full bg-[#0097b2] p-4">
-          <Image
-            src="/folded-map.svg"
-            alt="map"
-            width={28}
-            height={28}
-          />
-        </div>
-        <div className="flex flex-col gap-1">
-          <h4 className="bold-18 text-white">{title}</h4>
-          <p className="regular-14 text-white">{subtitle}</p>
-        </div>
-      </div>
+    <div
+      className={`relative h-full w-full min-w-[1100px] ${backgroundImage} bg-cover bg-no-repeat lg:rounded-r-5xl 2xl:rounded-5xl`}
+    >
+      {/* Overlay anchor menutup seluruh kartu */}
+      {link && (
+        <a
+          href={link}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={title}
+          className="absolute inset-0 z-10 rounded-inherit"
+        />
+      )}
 
-      <div className="flexCenter gap-6">
-        <span className="flex -space-x-4 overflow-hidden">
-          {PEOPLE_URL.map((url) => (
-            <Image 
-              className="inline-block h-10 w-10 rounded-full"
-              src={url}
-              key={url}
-              alt="person"
-              width={52}
-              height={52}
-            />
-          ))}
-        </span>
-        <p className="bold-16 md:bold-20 text-white">{peopleJoined}</p>
+      <div className="flex h-full flex-col items-start justify-between p-6 lg:px-20 lg:py-10">
+        <div className="flexCenter gap-4">
+          <div className="rounded-full bg-[#0097b2] p-4">
+            <Image src="/folded-map.svg" alt="map" width={28} height={28} />
+          </div>
+          <div className="flex flex-col gap-1">
+            <h4 className="bold-18 text-white">{title}</h4>
+            <p className="regular-14 text-white">{subtitle}</p>
+            <p className="regular-14 text-white">{subsubtitle}</p>
+          </div>
+        </div>
+
+        <div className="flexCenter gap-6">
+          <span className="flex -space-x-4 overflow-hidden">
+            {PEOPLE_URL.map((url) => (
+              <Image
+                className="inline-block h-10 w-10 rounded-full"
+                src={url}
+                key={url}
+                alt="person"
+                width={52}
+                height={52}
+              />
+            ))}
+          </span>
+          <p className="bold-16 md:bold-20 text-white">{peopleJoined}</p>
+        </div>
       </div>
-     </div>
     </div>
-  )
-}
+  );
+};
 
 const Camp = () => {
   return (
-    <section id ="product_ai" className="2xl:max-container relative flex flex-col py-10 lg:mb-10 lg:py-20 xl:mb-20">
+    <section
+      id="product_ai"
+      className=" 2xl:max-container relative flex flex-col py-10 lg:mb-10 lg:py-20 xl:mb-20"
+    >
       <div className="hide-scrollbar flex h-[340px] w-full items-start justify-start gap-8 overflow-x-auto lg:h-[400px] xl:h-[640px]">
-        <CampSite 
+        <CampSite
           backgroundImage="bg-bg-img-1"
           title="AI Based Hiring Prediction"
-          subtitle="Mengambil keputusan dalam 1 Klik"
+          subtitle="Mengambil keputusan dalam 1 Klik dengan Model LLM Kami"
+          subsubtitle="(Click to try Model)"
           peopleJoined="9.1k+ Merekomendasikan ini"
+          link="https://fourkingsprototype.streamlit.app/"
         />
-        <CampSite 
+        <CampSite
+          backgroundImage="bg-bg-img-3"
+          title="Hiring Consultation"
+          subtitle="Konsultasi Hiring dengan Model LLM Kami"
+          subsubtitle="(Click to try Model)"
+          peopleJoined="13.2k+ Merekomendasikan ini"
+          link="https://google.com/"
+        />
+        <CampSite
           backgroundImage="bg-bg-img-2"
           title="AI Instant Interview"
           subtitle="Interview Instant dimanapun dan kapanpun dengan Model LLM Kami"
+          subsubtitle="(Click to try Model)"
           peopleJoined="13.2k+ Merekomendasikan ini"
+          link="https://google.com/"
         />
       </div>
 
@@ -71,19 +97,15 @@ const Camp = () => {
             <strong>Hiring Lambat?</strong> Perlu Solusi Cepat?
           </h2>
           <p className="regular-14 xl:regular-16 mt-5 text-white">
-            Temukan kandidat terbaik dengan Produk AI Kami. Hemat waktu, tingkatkan efisiensi, dan buat keputusan perekrutan yang lebih baik dalam hitungan menit, bukan minggu. Ucapkan selamat tinggal pada proses perekrutan yang lambat dan sambut masa depan perekrutan yang cepat dan cerdas bersama kami.
+            Temukan kandidat terbaik dengan Produk AI Kami. Hemat waktu, tingkatkan efisiensi, dan buat keputusan
+            perekrutan yang lebih baik dalam hitungan menit, bukan minggu. Ucapkan selamat tinggal pada proses
+            perekrutan yang lambat dan sambut masa depan perekrutan yang cepat dan cerdas bersama kami.
           </p>
-          <Image 
-            src="/quote.svg"
-            alt="camp-2"
-            width={186}
-            height={219}
-            className="camp-quote"
-          />
+          <Image src="/quote.svg" alt="camp-2" width={186} height={219} className="camp-quote" />
         </div>
       </div>
     </section>
-  )
-}
+  );
+};
 
-export default Camp
+export default Camp;
