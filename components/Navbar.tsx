@@ -6,7 +6,7 @@ import Button from './Button'
 
 const Navbar = () => {
   return (
-    <nav className="flexBetween max-container padding-container relative z-30 py-5">
+    <nav className=" flexBetween max-container padding-container relative z-30 py-5">
         <Link href={"/"}>
             <Image src="/TemanHire.svg" alt="logo" width={148} height={50}/>
         </Link>
@@ -20,12 +20,12 @@ const Navbar = () => {
         </ul>
 
         <div className="lg:flexCenter hidden">
-            <Button 
+            {/* <Button 
                 type="button"
                 title="Login"
                 icon='/user.svg'
                 variant='btn_dark_green'
-            />
+            /> */}
         </div>
 
         <Image

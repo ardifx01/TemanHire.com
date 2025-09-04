@@ -24,7 +24,7 @@ const Hero = () => {
       <div className="absolute inset-0 bg-black/40" />
 
       {/* Konten di atas video */}
-      <div className="relative z-10 max-container padding-container py-20 my-20">
+      <div className=" relative z-10 max-container padding-container py-20 my-20">
         <h1 className="text-white text-4xl md:text-6xl font-bold leading-tight">
           Recruitment & Decision <br/> <span className="text-[#0097b2]">Redefined</span>
         </h1>
