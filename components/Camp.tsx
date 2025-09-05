@@ -71,7 +71,7 @@ const Camp = () => {
           subtitle="Mengambil keputusan dalam 1 Klik dengan Model LLM Kami"
           subsubtitle="(Click to try Model)"
           peopleJoined="9.1k+ Merekomendasikan ini"
-          link="https://fourkingsprototype.streamlit.app/"
+          link="/service"
         />
         <CampSite
           backgroundImage="bg-bg-img-3"
@@ -79,7 +79,7 @@ const Camp = () => {
           subtitle="Konsultasi Hiring dengan Model LLM Kami"
           subsubtitle="(Click to try Model)"
           peopleJoined="13.2k+ Merekomendasikan ini"
-          link="https://google.com/"
+          link="/service"
         />
         <CampSite
           backgroundImage="bg-bg-img-2"
@@ -87,7 +87,7 @@ const Camp = () => {
           subtitle="Interview Instant dimanapun dan kapanpun dengan Model LLM Kami"
           subsubtitle="(Click to try Model)"
           peopleJoined="13.2k+ Merekomendasikan ini"
-          link="https://google.com/"
+          link="/service"
         />
       </div>
 
