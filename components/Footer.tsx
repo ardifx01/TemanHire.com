@@ -83,7 +83,7 @@ const Footer = () => {
 
         <div className="border bg-gray-20" />
         <p className="regular-14 w-full text-center text-gray-30">
-          Ver 0.4.6 TemanHire | All rights reserved
+          Ver 0.5.3 TemanHire | All rights reserved
         </p>
       </div>
     </footer>
