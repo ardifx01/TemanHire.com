@@ -18,6 +18,9 @@ body {
   .btn_white { 
     @apply  border-white bg-white px-8 py-3 text-[#0097b2]
   }
+    .btn_blue { 
+    @apply  border-[#0097b2] bg-[#0097b2] px-8 py-3 text-white
+  }
   .btn_black { 
     @apply  border-white bg-white px-8 py-3 text-black
   }

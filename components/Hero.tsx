@@ -36,7 +36,7 @@ const Hero = () => {
             type="button" 
             title="Get Started" 
             variant="btn_green" 
-            href="/#product_ai"
+            href="/service"
             />
             <Button
             type = "button"
