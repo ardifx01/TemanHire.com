@@ -22,28 +22,28 @@ export const FEATURES = [
     icon: '/linkedin.svg',
     variant: 'green',
     description:
-      'Freshgraduate telat lulus yang sedang mencari kerja di bidang AI. Hanya memiliki pengalaman Bootcamp, namun tidak memiliki pengalaman magang.',
+      'agunghari@temanhire.com',
   },
   {
     title: 'Agi Rahmawandi (Founder & CTO)',
     icon: '/linkedin.svg',
     variant: 'green',
     description:
-      "lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+      "agirahmawandi@temanhire.com",
   },
   {
     title: 'Shan Ramadhan (Founder & Head of Product)',
     icon: '/linkedin.svg',
     variant: 'green',
     description:
-      'lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+      'shanramadhan@temanhire.com',
   },
   {
     title: 'Muhammad Muqqorobin (Founder & Head of Marketing)',
     icon: '/linkedin.svg',
     variant: 'orange',
     description:
-      'lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+      'muhammadmuqqorobin@temanhire.com',
   },
 ];
 

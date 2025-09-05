@@ -36,12 +36,14 @@ const Hero = () => {
             type="button" 
             title="Get Started" 
             variant="btn_green" 
+            href="/#product_ai"
             />
             <Button
             type = "button"
             title = "Our Team"
             icon="/camp.svg"
             variant = "btn_white_text"
+            href="/#4_kings"
             />
           {/* <a
             href="#get-started"

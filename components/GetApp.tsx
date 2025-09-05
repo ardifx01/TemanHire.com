@@ -17,6 +17,8 @@ const GetApp = () => {
               icon="/apple.svg"
               variant="btn_black"
               full
+              href="https://github.com/4Kings-Rakamin"
+              external
             />
             <Button 
               type="button"
@@ -24,6 +26,8 @@ const GetApp = () => {
               icon="/fork.png"
               variant="btn_dark_green_outline"
               full
+              href="https://github.com/4Kings-Rakamin/TemanHire.com"
+              external
             />
           </div>
         </div>
