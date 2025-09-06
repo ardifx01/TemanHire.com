@@ -53,7 +53,7 @@ export const FOOTER_LINKS = [
     title: 'Learn More',
     links: [
       { label: 'About TemanHire', href: '/#home' },
-      { label: 'Press Releases', href: '/#press' },
+      { label: 'Demo', href: '/dashboard' },
       { label: 'License', href: '/#license' },
       { label: 'Jobs', href: '/#jobs' },
       { label: 'Privacy Policy', href: '/#privacy' },
