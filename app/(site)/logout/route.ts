@@ -25,6 +25,6 @@ export async function POST(req: Request) { // <-- terima req
   await supabase.auth.signOut();
 
   // gunakan origin dari request agar aman di dev, preview, dan prod
-  const redirectUrl = new URL('/login', req.url);
+  const redirectUrl = new URL('/', req.url);
   return NextResponse.redirect(redirectUrl);
 }
