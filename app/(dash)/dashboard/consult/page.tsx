@@ -17,4 +17,6 @@ export default async function ConsultPage() {
       <ConsultChat />
     </main>
   );
-}
+} 
+
+// mantap
