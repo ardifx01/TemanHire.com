@@ -2,6 +2,7 @@
 import { redirect } from 'next/navigation';
 import { supabaseServer } from '@/lib/supabase/server';
 import DeleteCandidateButton from '@/components/dashboard/DeleteCandidateButton';
+import { AiScoreButton } from '@/components/dashboard/AiScoreButton'
 import Link from 'next/link';
 
 export default async function DashboardPage() {
@@ -18,7 +19,7 @@ export default async function DashboardPage() {
 
   const { data: candidates } = await supabase
     .from('candidates')
-    .select('id, name, interview_score, skill_score, personality_score, education_level, recruitment_strategy, experience_level, status, created_at')
+    .select('id, name, interview_score, skill_score, personality_score, education_level, recruitment_strategy, experience_level, status, created_at, ai_score, ai_notes, ai_pass')
     .eq('owner_id', session.user.id)
     .order('created_at', { ascending: false });
 
@@ -58,7 +59,7 @@ export default async function DashboardPage() {
 
           <ul className="divide-y rounded-md border">
             {(candidates ?? []).map((c) => (
-              <li key={c.id} className="grid grid-cols-6 gap-3 p-3">
+              <li key={c.id} className="grid grid-cols-7 gap-3 p-3">
                 <div className="font-medium">{c.name}</div>
                 <div className="text-sm">Interview: {c.interview_score}</div>
                 <div className="text-sm">Skill: {c.skill_score}</div>
@@ -66,7 +67,17 @@ export default async function DashboardPage() {
                 <div className="text-sm">
                   {c.education_level} • {c.experience_level} • {c.status}
                 </div>
+                <div className="text-sm">
+                {typeof c.ai_score === 'number' ? `AI: ${c.ai_score}/100` : 'AI: —'}
+                {typeof c.ai_score === 'number' && (
+                    <span className={`ml-2 rounded px-2 py-0.5 text-xs border
+                    ${c.ai_pass ? 'border-green-600 text-green-700' : 'border-red-600 text-red-700'}`}>
+                    {c.ai_pass ? 'Lolos' : 'Tidak Lolos'}
+                    </span>
+                )}
+                </div>
                 <div className="flex justify-end gap-2">
+                    <AiScoreButton id={c.id} />
                     <Link href={`/dashboard/candidates/${c.id}/edit`}  className="rounded-md border px-2 py-1 text-sm hover:bg-black/5">Edit</Link>
                      <DeleteCandidateButton id={c.id} name={c.name} />      
                 </div>
