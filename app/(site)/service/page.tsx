@@ -116,8 +116,7 @@ export default function ServicePage() {
                 icon="/folded-map.svg"
                 variant="btn_blue"
                 full
-                href="https://fourkingsprototype.streamlit.app/"
-                external
+                href="/login"
                 />                
               </div>
             </div>
