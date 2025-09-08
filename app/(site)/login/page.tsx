@@ -1,113 +1,46 @@
-"use client";
+'use client';
+
 import { useState } from 'react';
-import Image from 'next/image';
+import { supabaseBrowser } from '@/lib/supabase/client';
+import { useRouter } from 'next/navigation';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [err, setErr] = useState<string|null>(null);
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle login logic here
+    setErr(null); setLoading(true);
+    const supabase = supabaseBrowser();
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    setLoading(false);
+    if (error) return setErr(error.message);
+    router.push('/dashboard');
   };
 
   return (
-    <section className="min-h-screen flex items-center justify-center px-4">
-      <div className="max-w-md w-full space-y-8 bg-white p-10 rounded-xl shadow-lg">
-        {/* Logo */}
-        <div className="flex justify-center">
-          <Image
-            src="/TemanHire.svg"
-            alt="TemanHire Logo"
-            width={200}
-            height={60}
-            className="mb-6"
-          />
+    <main className="min-h-[70vh] grid place-items-center p-6">
+      <form onSubmit={onSubmit} className="w-full max-w-sm space-y-4 border rounded-xl p-5">
+        <h1 className="text-2xl font-bold">Log in</h1>
+        <div className="space-y-2">
+          <label className="block text-sm">Email</label>
+          <input className="w-full rounded-md border px-3 py-2 bg-transparent" type="email" required
+            value={email} onChange={(e)=>setEmail(e.target.value)} />
         </div>
-
-        {/* Header */}
-        <div className="text-center">
-          <h2 className="mt-6 text-3xl font-bold text-gray-900">
-            Welcome back
-          </h2>
-          <p className="mt-2 text-sm text-gray-600">
-            Please sign in to your account
-          </p>
+        <div className="space-y-2">
+          <label className="block text-sm">Password</label>
+          <input className="w-full rounded-md border px-3 py-2 bg-transparent" type="password" required
+            value={password} onChange={(e)=>setPassword(e.target.value)} />
         </div>
-
-        {/* Form */}
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          <div className="space-y-4">
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                Email address
-              </label>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#0097b2] focus:border-[#0097b2]"
-                placeholder="Enter your email"
-              />
-            </div>
-
-            <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                Password
-              </label>
-              <input
-                id="password"
-                name="password"
-                type="password"
-                required
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#0097b2] focus:border-[#0097b2]"
-                placeholder="Enter your password"
-              />
-            </div>
-          </div>
-
-          <div className="flex items-center justify-between">
-            <div className="flex items-center">
-              <input
-                id="remember-me"
-                name="remember-me"
-                type="checkbox"
-                className="h-4 w-4 text-[#0097b2] focus:ring-[#0097b2] border-gray-300 rounded"
-              />
-              <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">
-                Remember me
-              </label>
-            </div>
-
-            <div className="text-sm">
-              <a href="/forgotpassword" className="font-medium text-[#0097b2] hover:text-[#007a8f]">
-                Forgot your password?
-              </a>
-            </div>
-          </div>
-
-          <div>
-            <button
-              type="submit"
-              className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#0097b2] hover:bg-[#007a8f] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#0097b2]"
-            >
-              Sign in
-            </button>
-          </div>
-        </form>
-
-        <p className="mt-6 text-center text-sm text-gray-600">
-          Don't have an account?{' '}
-          <a href="/signup" className="font-medium text-[#0097b2] hover:text-[#007a8f]">
-            Sign up
-          </a>
-        </p>
-      </div>
-    </section>
+        {err && <p className="text-sm text-red-500">{err}</p>}
+        <button disabled={loading} className="w-full rounded-md border px-3 py-2 font-semibold hover:bg-black/5 disabled:opacity-50">
+          {loading ? 'Signing in...' : 'Log in'}
+        </button>
+        <p className="text-sm">New here? <a className="underline" href="/signup">Create account</a></p>
+      </form>
+    </main>
   );
 }
