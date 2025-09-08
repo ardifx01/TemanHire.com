@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import { createServerClient } from '@supabase/ssr';
 
-export async function POST() {
+export async function POST(req: Request) { // <-- terima req
   const cookieStore = cookies();
 
   const supabase = createServerClient(
@@ -22,9 +22,9 @@ export async function POST() {
     }
   );
 
-  // hapus session di Supabase
   await supabase.auth.signOut();
 
-  // redirect kembali ke login page
-  return NextResponse.redirect(new URL('/login', process.env.NEXT_PUBLIC_BASE_URL ?? 'http://localhost:3000'));
+  // gunakan origin dari request agar aman di dev, preview, dan prod
+  const redirectUrl = new URL('/login', req.url);
+  return NextResponse.redirect(redirectUrl);
 }
