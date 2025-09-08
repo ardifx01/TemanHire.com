@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation';
 import { supabaseServer } from '@/lib/supabase/server';
 import DeleteCandidateButton from '@/components/dashboard/DeleteCandidateButton';
 import { AiScoreButton } from '@/components/dashboard/AiScoreButton'
+import { AiScoreAllButton } from '@/components/dashboard/AiScoreAllButton';
 import Link from 'next/link';
 
 export default async function DashboardPage() {
@@ -23,71 +24,210 @@ export default async function DashboardPage() {
     .eq('owner_id', session.user.id)
     .order('created_at', { ascending: false });
 
+  const total = candidates?.length ?? 0;
+  const passed = (candidates ?? []).filter(c => c.ai_pass === true).length;
+  const failed = (candidates ?? []).filter(c => c.ai_pass === false).length;
+  const unscored = total - passed - failed;
+
   return (
     <main className="min-h-[70vh] p-6 space-y-6">
-      <h1 className="text-2xl font-bold">Dashboard</h1>
+      {/* Header */}
+      <h1 className="text-2xl font-bold text-black">Dashboard</h1>
 
-      <div className="rounded-lg border p-4">
-        <p className="text-sm opacity-80">
+      {/* Welcome Card */}
+      <div className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
+        <p className="text-sm text-gray-600">
           Welcome{profile?.full_name ? `, ${profile.full_name}` : ''}! ({session.user.email})
         </p>
       </div>
 
-      {(candidates?.length ?? 0) === 0 ? (
-        <div className="rounded-md border p-6 text-center">
-          <p className="mb-3">Kamu belum punya kandidat.</p>
-          <a
-            href="/dashboard/forminput"
-            className="rounded-md border px-3 py-2 hover:bg-black/5"
-          >
-            Tambah kandidat
-          </a>
-          <a href="/dashboard/import" className="rounded-md border px-3 py-2 hover:bg-black/5">Import CSV</a>
+      {/* Statistics Cards */}
+      <section className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+          <p className="text-sm text-gray-600 mb-2">Total Kandidat</p>
+          <p className="text-3xl font-bold text-[#0097b2]">{total}</p>
         </div>
-      ) : (
-        <div className="space-y-2">
-          <div className="flex items-center justify-between">
-            <h2 className="text-lg font-semibold">Your Candidates</h2>
-            <a href="/dashboard/import" className="rounded-md border px-3 py-2 text-sm hover:bg-black/5">Import CSV</a>
+        <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+          <p className="text-sm text-gray-600 mb-2">Lolos (AI)</p>
+          <p className="text-3xl font-bold text-green-600">{passed}</p>
+        </div>
+        <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+          <p className="text-sm text-gray-600 mb-2">Tidak Lolos (AI)</p>
+          <p className="text-3xl font-bold text-red-600">{failed}</p>
+          {unscored > 0 && (
+            <p className="text-xs text-gray-500 mt-2">Belum dinilai: {unscored}</p>
+          )}
+        </div>
+      </section>
+
+      {/* Main Content */}
+      {(candidates?.length ?? 0) === 0 ? (
+        <div className="rounded-lg border border-gray-200 bg-white p-8 text-center shadow-sm">
+          <p className="mb-4 text-gray-700">Kamu belum punya kandidat.</p>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <a
               href="/dashboard/forminput"
-              className="rounded-md border px-3 py-2 text-sm hover:bg-black/5"
+              className="rounded-md bg-[#0097b2] text-white px-4 py-2 hover:bg-[#007a8f] transition-colors"
             >
               Tambah kandidat
             </a>
+            <a 
+              href="/dashboard/import" 
+              className="rounded-md border border-[#0097b2] text-[#0097b2] px-4 py-2 hover:bg-[#0097b2] hover:text-white transition-colors"
+            >
+              Import CSV
+            </a>
+          </div>
+        </div>
+      ) : (
+        <div className="space-y-4">
+          {/* Header Actions */}
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <h2 className="text-xl font-semibold text-black">Your Candidates</h2>
+            <div className="flex flex-wrap gap-2">
+              <AiScoreAllButton />
+              <a 
+                href="/dashboard/import" 
+                className="rounded-md border border-[#0097b2] text-[#0097b2] px-3 py-2 text-sm hover:bg-[#0097b2] hover:text-white transition-colors"
+              >
+                Import CSV
+              </a>
+              <a
+                href="/dashboard/forminput"
+                className="rounded-md bg-[#0097b2] text-white px-3 py-2 text-sm hover:bg-[#007a8f] transition-colors"
+              >
+                Tambah kandidat
+              </a>
+            </div>
           </div>
 
-          <ul className="divide-y rounded-md border">
-            {(candidates ?? []).map((c) => (
-              <li key={c.id} className="grid grid-cols-7 gap-3 p-3">
-                <div className="font-medium">{c.name}</div>
-                <div className="text-sm">Interview: {c.interview_score}</div>
-                <div className="text-sm">Skill: {c.skill_score}</div>
-                <div className="text-sm">Personality: {c.personality_score}</div>
-                <div className="text-sm">
-                  {c.education_level} • {c.experience_level} • {c.status}
+          {/* Candidates Table */}
+          <div className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+            <div className="overflow-x-auto">
+              <div className="min-w-full">
+                {/* Table Header - Hidden on mobile, visible on larger screens */}
+                <div className="hidden lg:grid lg:grid-cols-10 gap-4 p-4 bg-[#0097b2] border-b border-gray-200">
+                  <div className="col-span-2 text-sm font-medium text-white">Nama</div>
+                  <div className="text-sm font-medium text-white">Strategi</div>
+                  <div className="text-sm font-medium text-white">Interview</div>
+                  <div className="text-sm font-medium text-white">Skill</div>
+                  <div className="text-sm font-medium text-white">Personality</div>
+                  <div className="text-sm font-medium text-white">Education</div>
+                  <div className="text-sm font-medium text-white">Experience</div>
+                  <div className="text-sm font-medium text-white">Status</div>
+                  <div className="text-sm font-medium text-white">AI Score</div>
                 </div>
-                <div className="text-sm">
-                {typeof c.ai_score === 'number' ? `AI: ${c.ai_score}/100` : 'AI: —'}
-                {typeof c.ai_score === 'number' && (
-                    <span className={`ml-2 rounded px-2 py-0.5 text-xs border
-                    ${c.ai_pass ? 'border-green-600 text-green-700' : 'border-red-600 text-red-700'}`}>
-                    {c.ai_pass ? 'Lolos' : 'Tidak Lolos'}
-                    </span>
-                )}
+
+                {/* Table Body */}
+                <div className="divide-y divide-gray-200">
+                  {(candidates ?? []).map((c) => (
+                    <div key={c.id} className="p-4">
+                      {/* Desktop Layout */}
+                      <div className="hidden lg:grid lg:grid-cols-10 gap-3">
+                        <div className="col-span-2 font-medium text-black">{c.name}</div>
+                        <div className="text-sm text-gray-700 truncate">{c.recruitment_strategy}</div>
+                        <div className="text-sm text-[#0097b2] font-medium">{c.interview_score}</div>
+                        <div className="text-sm text-[#0097b2] font-medium">{c.skill_score}</div>
+                        <div className="text-sm text-[#0097b2] font-medium">{c.personality_score}</div>
+                        <div className="text-sm text-gray-700 truncate">{c.education_level}</div>
+                        <div className="text-sm text-gray-700 truncate">{c.experience_level}</div>
+                        <div className="text-sm text-gray-700 truncate">{c.status}</div>
+                        <div className="flex flex-col gap-2">
+                          {/* AI Score Display */}
+                          <div className="text-sm">
+                            {typeof c.ai_score === 'number' ? (
+                              <div className="flex gap-1">
+                                <span className="text-black font-medium">{c.ai_score}/100</span>
+                                <span className={`inline-block rounded-full px-2 py-0.5 text-xs font-medium ${c.ai_pass ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                                  {c.ai_pass ? 'Lolos' : 'Tidak Lolos'}
+                                </span>
+                              </div>
+                            ) : (
+                              <span className="text-gray-400">—</span>
+                            )}
+                          </div>
+                          {/* Action Buttons */}
+                          <div className="flex justify-end gap-1">
+                            <AiScoreButton id={c.id} />
+                            <Link 
+                              href={`/dashboard/candidates/${c.id}/edit`}
+                              className="rounded-md border border-[#0097b2] text-[#0097b2] px-2 py-1 text-sm hover:bg-[#0097b2] hover:text-white transition-colors whitespace-nowrap"
+                            >
+                              Edit
+                            </Link>
+                            <DeleteCandidateButton id={c.id} name={c.name} />      
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Mobile Layout */}
+                      <div className="lg:hidden space-y-3">
+                        <div className="flex justify-between items-start">
+                          <h3 className="font-semibold text-black text-lg">{c.name}</h3>
+                          <div className="flex gap-1">
+                            <AiScoreButton id={c.id} />
+                            <Link 
+                              href={`/dashboard/candidates/${c.id}/edit`}
+                              className="rounded-md border border-[#0097b2] text-[#0097b2] px-2 py-1 text-sm hover:bg-[#0097b2] hover:text-white transition-colors"
+                            >
+                              Edit
+                            </Link>
+                            <DeleteCandidateButton id={c.id} name={c.name} />
+                          </div>
+                        </div>
+                        
+                        <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
+                          <div>
+                            <span className="text-gray-600">Strategi:</span>
+                            <span className="ml-2 text-gray-800">{c.recruitment_strategy}</span>
+                          </div>
+                          <div>
+                            <span className="text-gray-600">Status:</span>
+                            <span className="ml-2 text-gray-800">{c.status}</span>
+                          </div>
+                          <div>
+                            <span className="text-gray-600">Interview:</span>
+                            <span className="ml-2 text-[#0097b2] font-medium">{c.interview_score}</span>
+                          </div>
+                          <div>
+                            <span className="text-gray-600">Skill:</span>
+                            <span className="ml-2 text-[#0097b2] font-medium">{c.skill_score}</span>
+                          </div>
+                          <div>
+                            <span className="text-gray-600">Personality:</span>
+                            <span className="ml-2 text-[#0097b2] font-medium">{c.personality_score}</span>
+                          </div>
+                          <div>
+                            <span className="text-gray-600">Education:</span>
+                            <span className="ml-2 text-gray-800">{c.education_level}</span>
+                          </div>
+                          <div>
+                            <span className="text-gray-600">Experience:</span>
+                            <span className="ml-2 text-gray-800">{c.experience_level}</span>
+                          </div>
+                          <div>
+                            <span className="text-gray-600">AI Score:</span>
+                            {typeof c.ai_score === 'number' ? (
+                              <div className="ml-2 inline-flex items-center gap-2">
+                                <span className="text-black font-medium">{c.ai_score}/100</span>
+                                <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${c.ai_pass ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                                  {c.ai_pass ? 'Lolos' : 'Tidak Lolos'}
+                                </span>
+                              </div>
+                            ) : (
+                              <span className="ml-2 text-gray-400">—</span>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
-                <div className="flex justify-end gap-2">
-                    <AiScoreButton id={c.id} />
-                    <Link href={`/dashboard/candidates/${c.id}/edit`}  className="rounded-md border px-2 py-1 text-sm hover:bg-black/5">Edit</Link>
-                     <DeleteCandidateButton id={c.id} name={c.name} />      
-                </div>
-              </li>
-            ))}
-          </ul>
+              </div>
+            </div>
+          </div>
         </div>
       )}
     </main>
   );
 }
-
-// tes

@@ -29,7 +29,7 @@ export function AiScoreButton({ id }: { id: string }) {
       disabled={loading}
       className="rounded-md border px-2 py-1 text-sm hover:bg-black/5 disabled:opacity-50"
     >
-      {loading ? 'Scoring…' : 'AI Score'}
+      {loading ? 'Scoring…' : 'AI'}
     </button>
   );
 }

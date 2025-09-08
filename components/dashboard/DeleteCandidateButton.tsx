@@ -37,7 +37,7 @@ export default function DeleteCandidateButton({
     <button
       onClick={onDelete}
       disabled={loading}
-      className="rounded-md border px-2 py-1 text-sm hover:bg-black/5 disabled:opacity-50"
+      className="rounded-md border px-2 py-1  bg-[#0097b2] text-white text-sm hover:bg-[#007a8f] transition-colors"
     >
       {loading ? 'Deleting...' : 'Delete'}
     </button>
